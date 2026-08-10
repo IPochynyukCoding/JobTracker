@@ -2,7 +2,7 @@
 ## Disclaimer
 **MAKE SURE TO NOT OPEN THE jobs.db FILE ON ANY OTHER SQLite BROWSERS OR EDITORS SUCH AS DB BROWSER, OTHERWISE IT WILL GIVE YOU A "Database is Locked" ERROR!**
 ## Purpose
-JobTracker is a simple Python CLI interface to add jobs, modify job statuses, and view all jobs in a simple and elegant table. JobTracker also uses a SQLite database to ensure entirely local functionality without any online connections or fancy software. Lastly, JobTracker only requires one outside dependency to work, Rich, to ensure a nice and clean table interface, compared to using Pandas, MatPlotLib, and Plottable to provide the same (if not more complex) interface.
+JobTracker is a simple Python CLI interface to add jobs, modify job statuses, and view all submitted jobs in a simple program. JobTracker also uses a SQLite database to ensure entirely local functionality without any online connections or fancy integrations. Lastly, JobTracker only requires one outside dependency to work, Rich, to ensure a nice and clean table interface, compared to using Pandas, MatPlotLib, and Plottable to provide the same (if not more complex) interface.
 ## Steps to set up the project
 1. Use ```git clone https://github.com/IPochynyukCoding/jobtracker``` to initialize the repository.
 2. Make sure you go to the "jobtracker" folder to ensure the files will work
