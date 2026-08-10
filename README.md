@@ -1,4 +1,4 @@
-# Python JobTracker
+# JobTracker CLI Application
 ## Disclaimer
 **MAKE SURE TO NOT OPEN THE jobs.db FILE ON ANY OTHER SQLite BROWSERS OR EDITORS SUCH AS DB BROWSER, OTHERWISE IT WILL GIVE YOU A "Database is Locked" ERROR!**
 ## Purpose
