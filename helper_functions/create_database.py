@@ -9,7 +9,7 @@ def initial_insert_operation(pulled_data:list[tuple],data:dict[str,str],query:st
 def database_creation():
     tables={"employer":{"columns":["employer_id","employer_name"],"types":["INTEGER PRIMARY KEY AUTOINCREMENT","TEXT"]},
             "job_site":{"columns":["site_id","site_name","site_base_url"],"types":["INTEGER PRIMARY KEY AUTOINCREMENT","TEXT","TEXT"]},
-            "job_status":{"columns":["job_status","status_name","hexcolor"],"types":["INTEGER PRIMARY KEY AUTOINCREMENT","TEXT",'VARCHAR(7) CHECK(length("hex_color") == 7)']},
+            "job_status":{"columns":["job_status","status_name","hex_color"],"types":["INTEGER PRIMARY KEY AUTOINCREMENT","TEXT",'VARCHAR(7) CHECK(length("hex_color") == 7)']},
             "job":{"columns":["job_id","job_title","last_updated_date","job_status","employer_id","site_id","interview_date"],"types":["INTEGER PRIMARY KEY AUTOINCREMENT","TEXT","DATE DEFAULT CURRENT_TIMESTAMP","INTEGER","INTEGER","INTEGER","DATETIME DEFAULT NULL"]}
             }
     foreign_keys={"employer":"employer_id","job_site":"site_id","job_status":"job_status"}
