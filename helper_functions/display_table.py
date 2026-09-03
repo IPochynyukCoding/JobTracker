@@ -1,6 +1,7 @@
 import sqlite3
 from rich.console import Console
 from rich.table import Table
+
 def fetch_items(sql_cursor:sqlite3.Cursor,query:str):
     return sql_cursor.execute(query).fetchall()
 

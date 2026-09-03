@@ -2,6 +2,15 @@ import sqlite3
 import datetime
 from helper_functions.display_table import fetch_items
 
+pending=1
+pending_submission=6
+
+def input_validation(message:str):
+    output=input(message)
+    if output.lower()=="q":
+        quit()
+    return output
+
 def input_table_validation(query_results:list[tuple],input_message:str):
     valid_selection=False
     while not valid_selection:
@@ -31,15 +40,14 @@ def add_job(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection):
     is_valid_site=False
     fetch_sites=fetch_items(db_cursor,"select site_id,site_base_url from job_site")
     while not is_valid_site:
-        current_url=input("Insert a URL for the job: ")
+        current_url=input_validation("Insert a URL for the job or press 'q' to quit: ")
         try:
-            if current_url.lower()=="q":
-                quit()
             if not current_url.startswith("https://"):
                 assert ValueError("Invalid URL")
             is_valid_site=True
         except ValueError:
             print("All sites must start with https:// to be valid")
+            continue
     for site in fetch_sites:
         if site[1] in current_url:
             is_new_site=False
@@ -49,21 +57,28 @@ def add_job(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection):
         print(f"Unrecognized site detected, attempting to add to database...")
         base_url=current_url.removeprefix("https://")
         base_url=base_url[0:base_url.index("/")+1]
-        base_name=input("Insert the site's name for the database or press 'q' to quit: ")
-        if base_name.lower()=="q":
-            quit()
+        base_name=input_validation("Insert the site's name for the database or press 'q' to quit: ")
         db_cursor.execute("insert into job_site(site_name,site_base_url) values(?,?)",[base_name,base_url])
         db_connection.commit()
-        job_site_id:int=db_cursor.execute("select site_id from job_site where base_url=?",[base_url]).fetchone()[0][0]
-    job_title=input("What is the job title?: ")
-    employer=input("What is the employer for the job?: ")
+        job_site_id:int=db_cursor.execute("select site_id from job_site where site_base_url=?",[base_url]).fetchone()[0]
+    job_title=input_validation("Insert the job title or press 'q' to quit: ")
+    employer=input_validation("Insert the employer for the job or press 'q' to quit: ")
     employer_search=db_cursor.execute("select employer_id from employer where employer_name LIKE ?",[employer]).fetchall()
     if len(employer_search)==0:
         db_cursor.execute("insert into employer(employer_name) values(?)",[employer])
         db_connection.commit()
     employer_id:list[tuple[int]]=db_cursor.execute("select employer_id from employer where employer_name LIKE ?",[employer]).fetchall()[0][0]
+
+    while True:
+        is_submitted=input_validation("Have you submitted the application? (Y/N): ")
+        if is_submitted.lower()=="y":
+            job_status=pending
+            break
+        elif is_submitted.lower()=="n":
+            job_status=pending_submission
+            break
     #1 is for pending status
-    query_parameters=[job_title,1,employer_id,job_site_id,current_url]
+    query_parameters=[job_title,job_status,employer_id,job_site_id,current_url]
     db_cursor.execute("insert into job(job_title,job_status,employer_id,site_id,job_listing_url) values(?,?,?,?,?)",query_parameters)
     db_connection.commit()
     input("Successfully added job, press any key to go back to main interface ")
