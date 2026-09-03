@@ -3,7 +3,7 @@ import sqlite3
 import subprocess
 import os
 from helper_functions.display_table import create_table
-from helper_functions.job_functions import add_job,modify_job
+from helper_functions.job_functions import add_job,modify_job,input_validation
 from helper_functions.create_database import database_creation
 from helper_functions.export_table import export_table
 is_windows= True if platform.system()=="Windows" else False
@@ -23,9 +23,7 @@ if __name__ == "__main__":
         for index,function_name in enumerate(function_keys):
             input_message+=f"{index+1} to {functions[function_name]["label"]}, "
         input_message+="or 'q' to quit: "
-        selection=input(input_message)
-        if selection.lower()=="q":
-            quit()
+        selection=input_validation(input_message)
         try:
             numbered_selection=int(selection)-1
             functions[function_keys[numbered_selection]]["function"](job_cursor,job_connector)

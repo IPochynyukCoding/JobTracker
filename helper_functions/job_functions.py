@@ -35,6 +35,13 @@ def input_date_validation(format:str,input_message:str,example:str):
             print(f"Invalid time format {date}, it must match {format}")
 
 
+def job_log(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection,job_id=None):
+    query="select job_id,last_updated_date,job_status from job order by job_id desc limit 1" if job_id==None else f"select job_id,last_updated_date,job_status from job where job={job_id}"
+    parameters=fetch_items(db_cursor,query)[0]
+    db_cursor.execute("insert into job_history(job_id,update_time,job_status) values(?,?,?)",parameters)
+
+
+
 def add_job(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection):
     is_new_site=True
     is_valid_site=False
@@ -81,6 +88,7 @@ def add_job(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection):
     query_parameters=[job_title,job_status,employer_id,job_site_id,current_url]
     db_cursor.execute("insert into job(job_title,job_status,employer_id,site_id,job_listing_url) values(?,?,?,?,?)",query_parameters)
     db_connection.commit()
+    job_log(db_cursor,db_connection)
     input("Successfully added job, press any key to go back to main interface ")
 
 
@@ -102,6 +110,7 @@ def modify_job(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection):
         db_connection.commit()
     current_date=datetime.datetime.strptime((datetime.datetime.now().astimezone().strftime("%Y-%m-%d")),"%Y-%m-%d")
     db_cursor.execute("update job set job_status=?,last_updated_date=? where job_id=?",[selected_status,current_date,selected_job])
+    job_log(db_cursor,db_connection,selected_job)
     db_connection.commit()
     input("Successfully modified job, press any key to go back to main interface ")
 

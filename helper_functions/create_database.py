@@ -7,22 +7,26 @@ def initial_insert_operation(pulled_data:list[tuple],data:dict[str,str],query:st
             connection.commit()
 
 def database_creation():
-    tables={"employer":{"columns":["employer_id","employer_name"],"types":["INTEGER PRIMARY KEY AUTOINCREMENT","TEXT"]},
-            "job_site":{"columns":["site_id","site_name","site_base_url"],"types":["INTEGER PRIMARY KEY AUTOINCREMENT","TEXT","TEXT"]},
-            "job_status":{"columns":["job_status","status_name","hex_color"],"types":["INTEGER PRIMARY KEY AUTOINCREMENT","TEXT",'VARCHAR(7) CHECK(length("hex_color") == 7)']},
-            "job":{"columns":["job_id","job_title","last_updated_date","job_status","employer_id","site_id","interview_date"],"types":["INTEGER PRIMARY KEY AUTOINCREMENT","TEXT","DATE DEFAULT CURRENT_TIMESTAMP","INTEGER","INTEGER","INTEGER","DATETIME DEFAULT NULL"]}
+    tables={"employer":{"columns":["employer_id","employer_name"],"types":["INTEGER PRIMARY KEY","TEXT"]},
+            "job_site":{"columns":["site_id","site_name","site_base_url"],"types":["INTEGER PRIMARY KEY","TEXT","TEXT"]},
+            "job_status":{"columns":["job_status","status_name","hex_color"],"types":["INTEGER PRIMARY KEY","TEXT",'VARCHAR(7) CHECK(length("hex_color") == 7)']},
+            "job":{"columns":["job_id","job_title","last_updated_date","job_status","employer_id","site_id","interview_date"],"types":["INTEGER PRIMARY KEY","TEXT","DATETIME DEFAULT (datetime('now', 'localtime'))","INTEGER","INTEGER","INTEGER","DATETIME DEFAULT NULL"]
+                    ,"foreign_keys":{"employer":"employer_id","job_site":"site_id","job_status":"job_status"}
+                   },
+            "job_history":{"columns":["job_history_id","job_id","update_date","job_status"],"types":["INTEGER PRIMARY KEY","INTEGER","DATETIME DEFAULT (datetime('now', 'localtime'))","INTEGER"],
+                           "foreign_keys":{"job":"job_id","job_status":"job_status"}}
             }
     foreign_keys={"employer":"employer_id","job_site":"site_id","job_status":"job_status"}
     job_sites={"LinkedIn":"https://linkedin.com","Indeed":"https://indeed.com","ZipRecruiter":"https://ziprecruiter.com"}
-    job_statuses={"Pending":"#ffffff","Ghosted":"#6b6b69","Accepted":"#16c60c","Rejected":"#e74856","Pending Interview":"#e0eb1e","Pending Submission":"#FFAC1C"}
+    job_statuses={"Pending Review":"#ffffff","Ghosted":"#6b6b69","Accepted":"#16c60c","Rejected":"#e74856","Pending Interview":"#e0eb1e","Pending Submission":"#FFAC1C"}
     job_connection=sqlite3.connect("jobs.db")
     job_cursor=job_connection.cursor()
     for table in tables:
         query_body=""
-        current=tables[table]
+        current:dict=tables[table]
         for index,column in enumerate(current["columns"]):
             query_body+= f"{column} {current["types"][index]}," if index!=len(current["columns"])-1 else f"{column} {current["types"][index]}"
-        if table=="job":
+        if current.get("foreign_keys"):
             for foreign_key in foreign_keys:
                 query_body+=f", FOREIGN KEY ({foreign_keys[foreign_key]}) REFERENCES {foreign_key}({foreign_keys[foreign_key]})"
         job_cursor.execute(f"CREATE TABLE IF NOT EXISTS {table} ({query_body})")
