@@ -23,6 +23,16 @@ if __name__ == "__main__":
         for index,function_name in enumerate(function_keys):
             input_message+=f"{index+1} to {functions[function_name]["label"]}, "
         input_message+="or 'q' to quit: "
+        print("""                                                                     
+             ▄▄▄▄▄▄          ▄▄▄▄▄▄▄                                   
+             █▀ ██       █▄█▀▀ ██▀▀▀▀                                  
+                ██       ██    ██   ▄                ▄▄           ▄    
+                ██ ▄███▄ ████▄ ██   ████▄▄▀▀█▄ ▄███▀ ██ ▄█▀ ▄█▀█▄ ████▄
+                ██ ██ ██ ██ ██ ██   ██   ▄█▀██ ██    ████   ██▄█▀ ██   
+                ██▄▀███▀▄████▀ ▀██▄▄█▀   ▀█▄██▄▀███▄▄██ ▀█▄▄▀█▄▄▄▄█▀   
+            ▄   ██                                                     
+            ▀████▀                                                     
+""")
         selection=input_validation(input_message)
         try:
             numbered_selection=int(selection)-1
