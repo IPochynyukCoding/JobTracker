@@ -36,7 +36,7 @@ def input_date_validation(format:str,input_message:str,example:str):
 
 
 def job_log(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection,job_id=None):
-    query="select job_id,last_updated_date,job_status from job order by job_id desc limit 1" if job_id==None else f"select job_id,last_updated_date,job_status from job where job={job_id}"
+    query="select job_id,last_updated_date,job_status from job order by job_id desc limit 1" if job_id==None else f"select job_id,last_updated_date,job_status from job where job_id={job_id}"
     parameters=fetch_items(db_cursor,query)[0]
     db_cursor.execute("insert into job_history(job_id,update_time,job_status) values(?,?,?)",parameters)
 
