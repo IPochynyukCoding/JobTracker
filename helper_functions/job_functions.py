@@ -22,6 +22,7 @@ def input_table_validation(query_results:list[tuple],input_message:str):
             return int(selection)
         except(ValueError,IndexError):
             print("Invalid selection, please try again!")
+            continue
 
 def input_date_validation(format:str,input_message:str,example:str):
     is_valid=False
@@ -48,11 +49,7 @@ def add_job(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection):
     fetch_sites=fetch_items(db_cursor,"select site_id,site_base_url from job_site")
     while not is_valid_site:
         current_url=input_validation("Insert a URL for the job or press 'q' to quit: ")
-        try:
-            if not current_url.startswith("https://"):
-                assert ValueError("Invalid URL")
-            is_valid_site=True
-        except ValueError:
+        if not current_url.startswith("https://"):
             print("All sites must start with https:// to be valid")
             continue
     for site in fetch_sites:
