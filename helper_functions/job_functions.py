@@ -52,6 +52,8 @@ def add_job(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection):
         if not current_url.startswith("https://"):
             print("All sites must start with https:// to be valid")
             continue
+        else:
+            is_valid_site=True
     for site in fetch_sites:
         if site[1] in current_url:
             is_new_site=False
