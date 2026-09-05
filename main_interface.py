@@ -21,6 +21,7 @@ def clear():
 
 
 if __name__ == "__main__":
+    clear()
     if not os.path.exists("jobs.db"):
         print("Jobs database not found, creating database...")
         database_creation()
