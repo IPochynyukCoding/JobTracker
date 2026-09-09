@@ -63,6 +63,7 @@ def add_job(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection):
         print(f"Unrecognized site detected, attempting to add to database...")
         base_url=current_url.removeprefix("https://")
         base_url=base_url[0:base_url.index("/")+1]
+        base_url="https://"+base_url
         base_name=input_validation("Insert the site's name for the database or press 'q' to quit: ")
         db_cursor.execute("insert into job_site(site_name,site_base_url) values(?,?)",[base_name,base_url])
         db_connection.commit()
