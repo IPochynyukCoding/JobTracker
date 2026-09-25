@@ -3,7 +3,7 @@ import sqlite3
 import subprocess
 import os
 from helper_functions.display_table import create_table
-from helper_functions.job_functions import add_job,modify_job,input_validation
+from helper_functions.job_functions import add_job,modify_job,input_validation,auto_update_ghost
 from helper_functions.create_database import database_creation
 from helper_functions.export_table import export_table
 
@@ -29,6 +29,7 @@ if __name__ == "__main__":
     job_cursor=job_connector.cursor()
     functions={"display":{"function":create_table,"label":"display table"},"add":{"function":add_job,"label":"add job"},"modify":{"function":modify_job,"label":"update job status"},"export":{"function":export_table,"label":"export table to CSV file"}}
     function_keys=list(functions.keys())
+    auto_update_ghost(job_cursor,job_connector)
     while True:
         input_message="Press "
         for index,function_name in enumerate(function_keys):

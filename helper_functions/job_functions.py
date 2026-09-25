@@ -1,6 +1,7 @@
 import sqlite3
 import datetime
 from helper_functions.display_table import fetch_items
+from rich.console import Console
 
 pending=1
 pending_submission=6
@@ -93,10 +94,16 @@ def add_job(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection):
 
 
 def modify_job(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection):
-    fetch_jobs=fetch_items(db_cursor,"select job_id,job_title,employer.employer_name,job_status.status_name from job left join employer on job.employer_id=employer.employer_id left join job_status on job.job_status=job_status.job_status where job.job_status!=2")
+    fetch_jobs=fetch_items(db_cursor,"select job_id,job_title,employer.employer_name,job_status.status_name,job_status.hex_color from job left join employer on job.employer_id=employer.employer_id left join job_status on job.job_status=job_status.job_status")
     fetch_statuses=fetch_items(db_cursor,"select status_name from job_status")
+    console=Console()
     for index,job in enumerate(fetch_jobs):
-        print(f"{index+1}. {job[1]} from {job[2]} with status '{job[3]}'")
+        job_name=job[1]
+        company=job[2]
+        current_status=job[3]
+        color=job[4]
+        console.print(f"{index+1}. {job_name} from {company} with status '{current_status}'",style=color,highlight=False)
+
     selected_job=input_table_validation(fetch_jobs,"Select a job to modify its status or press 'q' to quit: ")
     for index,status in enumerate(fetch_statuses):
         print(f"{index+1}. {status[0]}")
@@ -115,6 +122,23 @@ def modify_job(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection):
     input("Successfully modified job, press any key to go back to main interface ")
 
     
-            
+def auto_update_ghost(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection):
+    ghost_parameters=(2,)
+    ghost_query="select job_id,job_title,employer_name, floor(julianday('now')-julianday(last_updated_date)) as time_elapsed from job left join employer on job.employer_id=employer.employer_id where datetime(last_updated_date) <= datetime('now','-30 days') and job_status=1;"
+    ghost_update_query="update job set job_status=? where datetime(last_updated_date) <= datetime('now','-30 days') and job_status=1;"
+    fetch_ghost_jobs=fetch_items(db_cursor,ghost_query)
+    db_cursor.execute(ghost_update_query,ghost_parameters)
+    db_connection.commit()
+    for ghost_job in fetch_ghost_jobs:
+        ghosted_job_id=ghost_job[0]
+        ghosted_job=ghost_job[1]
+        ghosted_company=ghost_job[2]
+        ghosted_time=int(ghosted_job[3])
+        job_log(db_cursor,db_connection,job_id=ghosted_job_id)
+        print(f"{ghosted_job} at {ghosted_company} is now a ghosted job because you hadn't heard back in {ghosted_time} days")
+    
+
+
+
     
     
