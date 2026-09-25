@@ -18,7 +18,7 @@ def database_creation():
             }
     foreign_keys={"employer":"employer_id","job_site":"site_id","job_status":"job_status"}
     job_sites={"LinkedIn":"https://linkedin.com","Indeed":"https://indeed.com","ZipRecruiter":"https://ziprecruiter.com"}
-    job_statuses={"Pending Review":"#ffffff","Ghosted":"#6b6b69","Accepted":"#16c60c","Rejected":"#e74856","Pending Interview":"#e0eb1e","Pending Submission":"#FFAC1C","Removed":"#f70218"}
+    job_statuses={"Pending Review":"#ffffff","Ghosted":"#6b6b69","Accepted":"#16c60c","Rejected":"#e74856","Pending Interview":"#e0eb1e","Pending Submission":"#ffac1c","Removed":"#f70218","Withdrawn":"#5b8db8"}
     job_connection=sqlite3.connect("jobs.db")
     job_cursor=job_connection.cursor()
     for table in tables:

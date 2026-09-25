@@ -108,7 +108,7 @@ def add_job(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection):
 
 def modify_job(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection):
     fetch_jobs=fetch_items(db_cursor,"select job_id,job_title,employer.employer_name,job_status.status_name,job_status.hex_color from job left join employer on job.employer_id=employer.employer_id left join job_status on job.job_status=job_status.job_status")
-    fetch_statuses=fetch_items(db_cursor,"select status_name from job_status")
+    fetch_statuses=fetch_items(db_cursor,"select status_name,hex_color from job_status")
     console=Console(highlight=False)
     for index,job in enumerate(fetch_jobs):
         job_name=job[1]
@@ -119,7 +119,7 @@ def modify_job(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection):
 
     selected_job=input_table_validation(fetch_jobs,"Select a job to modify its status or press 'q' to quit: ")
     for index,status in enumerate(fetch_statuses):
-        print(f"{index+1}. {status[0]}")
+        console.print(f"{index+1}. {status[0]}",style=status[1],highlight=False)
     selected_status=input_table_validation(fetch_statuses,"Select a status or press 'q' to quit: ")
     #In case you get a interview
     if selected_status==5:
