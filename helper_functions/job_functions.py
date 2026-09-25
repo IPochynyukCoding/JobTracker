@@ -36,6 +36,18 @@ def input_date_validation(format:str,input_message:str,example:str):
         except ValueError:
             print(f"Invalid time format {date}, it must match {format}")
 
+def input_employer_validation(input_message:str,results):
+    for result in results:
+        print(f"{result[0]}. {result[1]}")
+    user_result=input_validation(input_message)
+    try:
+        return int(user_result)
+    except ValueError:
+        for result in results:
+            if user_result in result[1]:
+                return result[0]
+        return user_result
+
 
 def job_log(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection,job_id=None):
     query="select job_id,last_updated_date,job_status from job order by job_id desc limit 1" if job_id==None else f"select job_id,last_updated_date,job_status from job where job_id={job_id}"
@@ -48,6 +60,7 @@ def add_job(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection):
     is_new_site=True
     is_valid_site=False
     fetch_sites=fetch_items(db_cursor,"select site_id,site_base_url from job_site")
+    fetch_employers=fetch_items(db_cursor,"select * from employer")
     while not is_valid_site:
         current_url=input_validation("Insert a URL for the job or press 'q' to quit: ")
         if not current_url.startswith("https://"):
@@ -70,13 +83,13 @@ def add_job(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection):
         db_connection.commit()
         job_site_id:int=db_cursor.execute("select site_id from job_site where site_base_url=?",[base_url]).fetchone()[0]
     job_title=input_validation("Insert the job title or press 'q' to quit: ")
-    employer=input_validation("Insert the employer for the job or press 'q' to quit: ")
-    employer_search=db_cursor.execute("select employer_id from employer where employer_name LIKE ?",[employer]).fetchall()
-    if len(employer_search)==0:
+    employer=input_employer_validation("Select an employer from this list, type a new employer's name, or 'q' to quit: ",fetch_employers)
+    if type(employer)==str:
         db_cursor.execute("insert into employer(employer_name) values(?)",[employer])
         db_connection.commit()
-    employer_id:list[tuple[int]]=db_cursor.execute("select employer_id from employer where employer_name LIKE ?",[employer]).fetchall()[0][0]
-
+        employer_id:list[tuple[int]]=db_cursor.execute("select employer_id from employer where employer_name LIKE ?",[employer]).fetchall()[0][0]
+    else:
+        employer_id=employer
     while True:
         is_submitted=input_validation("Have you submitted the application? (Y/N): ")
         if is_submitted.lower()=="y":
@@ -96,13 +109,13 @@ def add_job(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection):
 def modify_job(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection):
     fetch_jobs=fetch_items(db_cursor,"select job_id,job_title,employer.employer_name,job_status.status_name,job_status.hex_color from job left join employer on job.employer_id=employer.employer_id left join job_status on job.job_status=job_status.job_status")
     fetch_statuses=fetch_items(db_cursor,"select status_name from job_status")
-    console=Console()
+    console=Console(highlight=False)
     for index,job in enumerate(fetch_jobs):
         job_name=job[1]
         company=job[2]
         current_status=job[3]
         color=job[4]
-        console.print(f"{index+1}. {job_name} from {company} with status '{current_status}'",style=color,highlight=False)
+        console.print(f"{index+1}. {job_name} from {company} with status '{current_status}'",style=color)
 
     selected_job=input_table_validation(fetch_jobs,"Select a job to modify its status or press 'q' to quit: ")
     for index,status in enumerate(fetch_statuses):
