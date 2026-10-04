@@ -146,9 +146,9 @@ def auto_update_ghost(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection)
         ghosted_job_id=ghost_job[0]
         ghosted_job=ghost_job[1]
         ghosted_company=ghost_job[2]
-        ghosted_time=int(ghosted_job[3])
+        ghosted_time=ghost_job[3]
         job_log(db_cursor,db_connection,job_id=ghosted_job_id)
-        print(f"{ghosted_job} at {ghosted_company} is now a ghosted job because you hadn't heard back in {ghosted_time} days")
+        print(f"{ghosted_job} at {ghosted_company} is now a ghosted job because you hadn't heard back in {int(ghosted_time)} days")
     
 
 
