@@ -50,9 +50,9 @@ def input_employer_validation(input_message:str,results):
 
 
 def job_log(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection,job_id=None):
-    query="select job_id,last_updated_date,job_status from job order by job_id desc limit 1" if job_id==None else f"select job_id,last_updated_date,job_status from job where job_id={job_id}"
+    query="select job_id,job_status from job order by job_id desc limit 1" if job_id==None else f"select job_id,job_status from job where job_id={job_id}"
     parameters=fetch_items(db_cursor,query)[0]
-    db_cursor.execute("insert into job_history(job_id,update_time,job_status) values(?,?,?)",parameters)
+    db_cursor.execute("insert into job_history(job_id,job_status,update_time) values(?,?,datetime('now','localtime'))",parameters)
     db_connection.commit()   
 
 
@@ -137,8 +137,8 @@ def modify_job(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection):
     
 def auto_update_ghost(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection):
     ghost_parameters=(2,)
-    ghost_query="select job_id,job_title,employer_name, floor(julianday('now')-julianday(last_updated_date)) as time_elapsed from job left join employer on job.employer_id=employer.employer_id where datetime(last_updated_date) <= datetime('now','-30 days') and job_status=1;"
-    ghost_update_query="update job set job_status=? where datetime(last_updated_date) <= datetime('now','-30 days') and job_status=1;"
+    ghost_query="select job_id,job_title,employer_name, floor(julianday('now','localtime')-julianday(last_updated_date)) as time_elapsed from job left join employer on job.employer_id=employer.employer_id where time_elapsed>=30 and job_status=1;"
+    ghost_update_query="update job set job_status=?,last_updated_date=datetime('now','localtime') where datetime(last_updated_date) <= datetime('now','-30 days','localtime') and job_status=1;"
     fetch_ghost_jobs=fetch_items(db_cursor,ghost_query)
     db_cursor.execute(ghost_update_query,ghost_parameters)
     db_connection.commit()
