@@ -48,10 +48,10 @@ if __name__ == "__main__":
         selection=input_validation(input_message)
         try:
             numbered_selection=int(selection)-1
+            functions[function_keys[numbered_selection]]["function"](job_cursor,job_connector)
         except(ValueError,IndexError):
             clear()
             print("Invalid function selection, please try again!")
             continue
-        functions[function_keys[numbered_selection]]["function"](job_cursor,job_connector)
         clear()
 
