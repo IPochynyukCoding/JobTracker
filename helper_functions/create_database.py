@@ -10,10 +10,10 @@ def database_creation():
     tables={"employer":{"columns":["employer_id","employer_name"],"types":["INTEGER PRIMARY KEY","TEXT"]},
             "job_site":{"columns":["site_id","site_name","site_base_url"],"types":["INTEGER PRIMARY KEY","TEXT","TEXT"]},
             "job_status":{"columns":["job_status","status_name","hex_color"],"types":["INTEGER PRIMARY KEY","TEXT",'VARCHAR(7) CHECK(length("hex_color") == 7)']},
-            "job":{"columns":["job_id","job_title","last_updated_date","job_status","employer_id","site_id","interview_date"],"types":["INTEGER PRIMARY KEY","TEXT","DATETIME DEFAULT (datetime('now', 'localtime'))","INTEGER","INTEGER","INTEGER","DATETIME DEFAULT NULL"]
+            "job":{"columns":["job_id","job_title","last_updated_date","job_status","employer_id","site_id","interview_date"],"types":["INTEGER PRIMARY KEY","TEXT","TEXT DEFAULT (datetime('now', 'localtime'))","INTEGER","INTEGER","INTEGER","TEXT DEFAULT NULL"]
                     ,"foreign_keys":{"employer":"employer_id","job_site":"site_id","job_status":"job_status"}
                    },
-            "job_history":{"columns":["job_history_id","job_id","update_date","job_status"],"types":["INTEGER PRIMARY KEY","INTEGER","DATETIME DEFAULT (datetime('now', 'localtime'))","INTEGER"],
+            "job_history":{"columns":["job_history_id","job_id","update_date","job_status"],"types":["INTEGER PRIMARY KEY","INTEGER","TEXT DEFAULT (datetime('now', 'localtime'))","INTEGER"],
                            "foreign_keys":{"job":"job_id","job_status":"job_status"}}
             }
     foreign_keys={"employer":"employer_id","job_site":"site_id","job_status":"job_status"}
