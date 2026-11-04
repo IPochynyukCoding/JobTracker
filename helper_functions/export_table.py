@@ -2,6 +2,7 @@ import sqlite3
 import datetime
 import csv
 import os
+import subprocess
 from helper_functions.job_functions import input_table_validation
 from helper_functions.display_table import fetch_items
 
@@ -75,8 +76,12 @@ def export_table(sql_cursor:sqlite3.Cursor,headers:list[str],search_query:str,di
     planned_path=resolve_path(f"\\exported_reports\\{directory_name}")
     current_date=datetime.datetime.now().astimezone().strftime("%Y%m%d_%H%M%S")
     file_name=f"{file_export_name}_{current_date}.csv"
-    with open(f"./exported_reports/{file_name}","w",newline="") as exported_file:
+    with open(f"./exported_reports/{directory_name}/{file_name}","w",newline="") as exported_file:
         exported_csv=csv.writer(exported_file,delimiter=";",skipinitialspace=True,quoting=csv.QUOTE_MINIMAL)
         exported_csv.writerow(headers)
         exported_csv.writerows(job_results)
+    if os.name=="nt":
+        os.startfile(planned_path)
+    else:
+        subprocess.run(["open",planned_path])
     input(f"Successfully added {file_name} to {planned_path}, press any key to go back to main interface ")
