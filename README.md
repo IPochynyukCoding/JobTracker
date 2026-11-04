@@ -45,4 +45,10 @@ JobTracker is a simple Python CLI interface to view all submitted jobs, add a ne
 
 ## How to export jobs to CSV file
 1. Open the main_interface.py file and press '4' on the menu
-2. Look for the most recent job_export.csv file and open it
+2. Select one of the three options 
+    2a. Current status for all Jobs
+    2b. Job History sorted chronologically
+        2ba. Sorts job history by update date.
+    2c. Job History sorted by Job ID
+        2ca. Sorts job history by both job and update date.
+3. Look for the specific file on the directory

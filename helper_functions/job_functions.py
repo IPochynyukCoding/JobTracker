@@ -13,8 +13,7 @@ def input_validation(message:str):
     return output
 
 def input_table_validation(query_results:list[tuple],input_message:str):
-    valid_selection=False
-    while not valid_selection:
+    while True:
         selection=input(input_message)
         try:
             if selection.lower()=="q":

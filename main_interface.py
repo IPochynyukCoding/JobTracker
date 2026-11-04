@@ -5,7 +5,7 @@ import os
 from helper_functions.display_table import create_table
 from helper_functions.job_functions import add_job,modify_job,input_validation,auto_update_ghost
 from helper_functions.create_database import database_creation
-from helper_functions.export_table import export_table
+from helper_functions.export_table import select_export
 
 
 def clear():
@@ -27,7 +27,7 @@ if __name__ == "__main__":
         database_creation()
     job_connector=sqlite3.connect("jobs.db")
     job_cursor=job_connector.cursor()
-    functions={"display":{"function":create_table,"label":"display table"},"add":{"function":add_job,"label":"add job"},"modify":{"function":modify_job,"label":"update job status"},"export":{"function":export_table,"label":"export table to CSV file"}}
+    functions={"display":{"function":create_table,"label":"display table"},"add":{"function":add_job,"label":"add job"},"modify":{"function":modify_job,"label":"update job status"},"export":{"function":select_export,"label":"export table to CSV file"}}
     function_keys=list(functions.keys())
     auto_update_ghost(job_cursor,job_connector)
     while True:
