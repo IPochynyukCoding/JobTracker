@@ -17,10 +17,10 @@ def resolve_path(subdirectory:str):
 
 def select_export(sql_cursor:sqlite3.Cursor,sql_connection:sqlite3.Connection):
     export_options=[
-        {"headers":["Job ID","Job Title","Last Updated","Job Status","Employer","Job Site","Interview Date"],
+        {"headers":["Job ID","Job Title","Last Updated","Job Status","Employer","Job Site","URL","Interview Date"],
          "query":
          '''
-        select job_id,job_title,last_updated_date, job_status.status_name, employer.employer_name, job_site.site_name,job.interview_date
+        select job_id,job_title,last_updated_date, job_status.status_name, employer.employer_name, job_site.site_name,job.job_listing_url,job.interview_date
         from job 
         left join employer on job.employer_id=employer.employer_id 
         left join job_site on job.site_id=job_site.site_id 
@@ -33,7 +33,7 @@ def select_export(sql_cursor:sqlite3.Cursor,sql_connection:sqlite3.Connection):
         {"headers":["Job ID","Job Title","Employer","Update Time","Status"],
          "query":
          '''
-        select job_history.job_id,job.job_title,employer.employer_name,job_history.update_time,job_status.status_name
+        select job_history.job_id,job.job_title,employer.employer_name,job.job_listing_url,job_history.update_time,job_status.status_name
         from job_history
         left join job on job_history.job_id=job.job_id
         left join job_status on job_history.job_status=job_status.job_status
