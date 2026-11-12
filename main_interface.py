@@ -5,7 +5,7 @@ import os
 try:
     import rich
 except ImportError:
-    subprocess.run(["pip","install","requirements.txt"])
+    subprocess.run(["pip","install","-r","requirements.txt"])
 from helper_functions.display_table import create_table
 from helper_functions.job_functions import add_job,modify_job,auto_update_ghost
 from helper_functions.create_database import database_creation
