@@ -69,6 +69,7 @@ def modify_job(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection):
     fetch_jobs=fetch_items(db_cursor,"select job_id,job_title,employer.employer_name,job_status.status_name,job_status.hex_color from job left join employer on job.employer_id=employer.employer_id left join job_status on job.job_status=job_status.job_status")
     fetch_statuses=fetch_items(db_cursor,"select status_name,hex_color from job_status")
     console=Console(highlight=False)
+    interview_time=None
     for index,job in enumerate(fetch_jobs):
         job_name=job[1]
         company=job[2]
@@ -89,7 +90,7 @@ def modify_job(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection):
         db_connection.commit()
     current_time=datetime.datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S")
     db_cursor.execute("update job set job_status=?,last_updated_date=? where job_id=?",[selected_status,current_time,selected_job])
-    job_log(db_cursor,db_connection,selected_job)
+    job_log(db_cursor,db_connection,selected_job,interview_time)
     db_connection.commit()
     input("Successfully modified job, press any key to go back to main interface ")
 
