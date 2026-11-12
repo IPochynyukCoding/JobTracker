@@ -9,7 +9,7 @@ pending_submission=6
 
 def job_log(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection,job_id=None,interview_date=None):
     query="select job_id,job_status from job order by job_id desc limit 1" if job_id==None else f"select job_id,job_status from job where job_id={job_id}"
-    insertion_query= "insert into job_history(job_id,job_status,update_time) values(?,?,datetime('now','localtime'))" if interview_date=None else 
+    insertion_query= "insert into job_history(job_id,job_status,update_time) values(?,?,datetime('now','localtime'))" if interview_date==None else "insert into job_history(job_id,job_status) values(?,?)"
     parameters=fetch_items(db_cursor,query)[0]
     db_cursor.execute(insertion_query,parameters)
     db_connection.commit()   
