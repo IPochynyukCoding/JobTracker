@@ -2,15 +2,16 @@ import platform
 import sqlite3
 import subprocess
 import os
+try:
+    import rich
+except ImportError:
+    subprocess.run(["pip","install","requirements.txt"])
 from helper_functions.display_table import create_table
 from helper_functions.job_functions import add_job,modify_job,auto_update_ghost
 from helper_functions.create_database import database_creation
 from helper_functions.export_table import select_export
 from helper_functions.input_validation import input_validation
-try:
-    import rich
-except ImportError:
-    subprocess.run(["pip","install","requirements.txt"])
+
 
 def clear():
     is_windows= True if platform.system()=="Windows" else False
