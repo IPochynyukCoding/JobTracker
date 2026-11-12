@@ -18,8 +18,7 @@ JobTracker is a simple Python CLI interface to view all submitted jobs, add a ne
 ## Steps to set up the project
 1. Use ```git clone https://github.com/IPochynyukCoding/jobtracker``` to initialize the repository.
 2. Make sure you go to the "jobtracker" folder to ensure the files will work
-3. Use ```pip install requirements.txt``` to install the Rich Python library 
-4. Open main_interface.py to setup the SQLite database to create the database.
+3. Open main_interface.py to setup the SQLite database, alongside installing the Rich Python library.
 
 
 ## How to view the job table
@@ -28,27 +27,32 @@ JobTracker is a simple Python CLI interface to view all submitted jobs, add a ne
 3. Press any key to exit the table view.
 
 ## How to add a job to the database
-1. Open the main_interface.py file and press '2' on the menu
-2. Paste the job URL from your browser (if the base URL does not exist, it will prompt you to add the site's name to add to the database)
-3. Paste the job title from the job listing
-4. Paste the employer name from the job listing
-5. Wait for the database to add the job
+1. Open the main_interface.py file and press '2' on the menu.
+2. Paste the job URL from your browser (if the base URL does not exist, it will prompt you to add the site's name to add to the database).
+3. Paste the job title from the job listing.
+4. Paste the employer name from the job listing.
+5. Wait for the database to add the job.
+
+## How to view a job's application history
+1. Open the main_interface.py file and press '3' on the menu.
+2. Find the job you want to view the history.
+3. Press any key to exit the table view.
 
 ## How to modify a job's status
-1. Open the main_interface.py file and press '3' on the menu
-2. Find the job you want to update
-3. Select the most recent status in the list (i.e., if you get a rejection email, select "Rejected")
+1. Open the main_interface.py file and press '4' on the menu.
+2. Find the job you want to update.
+3. Select the most recent status in the list (i.e., if you get a rejection email, select "Rejected").
 ### Special Case, in case you get an interview
 4. Input the date with the format of "YYYY-MM-DD", which if you get an interview date on Feburary 4th, 2026, input ```2026-02-04``` to the prompt.
 5. Input the time with the 24-hour format, which if you get an interview at "2:00PM", input ```14:00``` to the prompt, or if you have an interview at "12:00AM", input ```00:00``` to the prompt. Lastly, if you have an interview at "9:00AM", input ```09:00``` to the prompt.
 
 
 ## How to export jobs to CSV file
-1. Open the main_interface.py file and press '4' on the menu
-2. Select one of the three options 
-    2a. Current status for all Jobs
-    2b. Job History sorted chronologically
+1. Open the main_interface.py file and press '5' on the menu.
+2. Select one of the three options:
+    2a. Current status for all Jobs.
+    2b. Job History sorted chronologically.
         2ba. Sorts job history by update date.
-    2c. Job History sorted by Job ID
+    2c. Job History sorted by Job ID.
         2ca. Sorts job history by both job and update date.
-3. Look for the specific file on the directory
+3. Look for the specific file on the directory.

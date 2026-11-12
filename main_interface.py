@@ -6,7 +6,7 @@ try:
     import rich
 except ImportError:
     subprocess.run(["pip","install","-r","requirements.txt"])
-from helper_functions.display_table import create_table
+from helper_functions.display_table import create_table,display_application_history
 from helper_functions.job_functions import add_job,modify_job,auto_update_ghost
 from helper_functions.create_database import database_creation
 from helper_functions.export_table import select_export
@@ -32,7 +32,16 @@ if __name__ == "__main__":
         database_creation()
     job_connector=sqlite3.connect("jobs.db")
     job_cursor=job_connector.cursor()
-    functions={"display":{"function":create_table,"label":"display table"},"add":{"function":add_job,"label":"add job"},"modify":{"function":modify_job,"label":"update job status"},"export":{"function":select_export,"label":"export table to CSV file"}}
+    functions = {
+    "display": {"function": create_table, "label": "display table"},
+    "add": {"function": add_job, "label": "add job"},
+    "history": {
+        "function": display_application_history,
+        "label": "view job application history",
+    },
+    "modify": {"function": modify_job, "label": "update job status"},
+    "export": {"function": select_export, "label": "export table to CSV file"},
+}
     function_keys=list(functions.keys())
     auto_update_ghost(job_cursor,job_connector)
     while True:
