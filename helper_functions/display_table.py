@@ -41,9 +41,9 @@ def display_application_history(sql_cursor:sqlite3.Cursor,sql_connector:sqlite3.
         console.print(f"{index+1}. {job_name} from {company} with status '{current_status}'",style=color)
 
     selected_job=input_table_validation(fetch_jobs,"Select a job to view its application history or press 'q' to quit: ")
-    headers=["Job Title","Employer","Update Date","Job Status"]
+    headers=["Job Title","Employer","Update Date","Job Status","Interview Date"]
     search_query='''
-    select job.job_title,employer.employer_name,job_history.update_time,job_status.status_name
+    select job.job_title,employer.employer_name,job_history.update_time,job_status.status_name,job_history.interview_date
     from job_history
     join job on job_history.job_id=job.job_id
     join employer on job.employer_id=employer.employer_id
