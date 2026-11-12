@@ -3,7 +3,7 @@ import datetime
 import csv
 import os
 import subprocess
-from helper_functions.job_functions import input_table_validation
+from helper_functions.input_validation import input_table_validation
 from helper_functions.display_table import fetch_items
 
 def resolve_path(subdirectory:str):

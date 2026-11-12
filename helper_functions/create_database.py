@@ -13,7 +13,7 @@ def database_creation():
             "job":{"columns":["job_id","job_title","last_updated_date","job_status","employer_id","site_id","interview_date"],"types":["INTEGER PRIMARY KEY","TEXT","TEXT DEFAULT (datetime('now', 'localtime'))","INTEGER","INTEGER","INTEGER","TEXT DEFAULT NULL"]
                     ,"foreign_keys":{"employer":"employer_id","job_site":"site_id","job_status":"job_status"}
                    },
-            "job_history":{"columns":["job_history_id","job_id","update_date","job_status"],"types":["INTEGER PRIMARY KEY","INTEGER","TEXT DEFAULT (datetime('now', 'localtime'))","INTEGER"],
+            "job_history":{"columns":["job_history_id","job_id","update_date","job_status","interview_date"],"types":["INTEGER PRIMARY KEY","INTEGER","TEXT DEFAULT (datetime('now', 'localtime'))","INTEGER","TEXT"],
                            "foreign_keys":{"job":"job_id","job_status":"job_status"}}
             }
     foreign_keys={"employer":"employer_id","job_site":"site_id","job_status":"job_status"}

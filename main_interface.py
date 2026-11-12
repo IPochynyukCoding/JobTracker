@@ -3,10 +3,10 @@ import sqlite3
 import subprocess
 import os
 from helper_functions.display_table import create_table
-from helper_functions.job_functions import add_job,modify_job,input_validation,auto_update_ghost
+from helper_functions.job_functions import add_job,modify_job,auto_update_ghost
 from helper_functions.create_database import database_creation
 from helper_functions.export_table import select_export
-
+from helper_functions.input_validation import input_validation
 
 def clear():
     is_windows= True if platform.system()=="Windows" else False

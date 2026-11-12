@@ -1,57 +1,17 @@
 import sqlite3
 import datetime
 from helper_functions.display_table import fetch_items
+from helper_functions.input_validation import input_validation,input_date_validation,input_employer_validation,input_table_validation
 from rich.console import Console
 
 pending=1
 pending_submission=6
 
-def input_validation(message:str):
-    output=input(message)
-    if output.lower()=="q":
-        quit()
-    return output
-
-def input_table_validation(query_results:list[tuple],input_message:str):
-    while True:
-        selection=input(input_message)
-        try:
-            if selection.lower()=="q":
-                quit()
-            selected_result=query_results[int(selection)-1]
-            return int(selection)
-        except(ValueError,IndexError):
-            print("Invalid selection, please try again!")
-            continue
-
-def input_date_validation(format:str,input_message:str,example:str):
-    is_valid=False
-    print(example)
-    while not is_valid:
-        date=input(input_message)
-        try:
-            date_conversion=datetime.datetime.strptime(date,format)
-            return date_conversion.strftime(format)
-        except ValueError:
-            print(f"Invalid time format {date}, it must match {format}")
-
-def input_employer_validation(input_message:str,results):
-    for result in results:
-        print(f"{result[0]}. {result[1]}")
-    user_result=input_validation(input_message)
-    try:
-        return int(user_result)
-    except ValueError:
-        for result in results:
-            if user_result in result[1]:
-                return result[0]
-        return user_result
-
-
-def job_log(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection,job_id=None):
+def job_log(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection,job_id=None,interview_date=None):
     query="select job_id,job_status from job order by job_id desc limit 1" if job_id==None else f"select job_id,job_status from job where job_id={job_id}"
+    insertion_query= "insert into job_history(job_id,job_status,update_time) values(?,?,datetime('now','localtime'))" if interview_date=None else 
     parameters=fetch_items(db_cursor,query)[0]
-    db_cursor.execute("insert into job_history(job_id,job_status,update_time) values(?,?,datetime('now','localtime'))",parameters)
+    db_cursor.execute(insertion_query,parameters)
     db_connection.commit()   
 
 
