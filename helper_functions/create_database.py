@@ -16,7 +16,6 @@ def database_creation():
             "job_history":{"columns":["job_history_id","job_id","update_date","job_status","interview_date"],"types":["INTEGER PRIMARY KEY","INTEGER","TEXT DEFAULT (datetime('now', 'localtime'))","INTEGER","TEXT"],
                            "foreign_keys":{"job":"job_id","job_status":"job_status"}}
             }
-    foreign_keys={"employer":"employer_id","job_site":"site_id","job_status":"job_status"}
     job_sites={"LinkedIn":"https://www.linkedin.com/","Indeed":"https://www.indeed.com/","ZipRecruiter":"https://www.ziprecruiter.com/"}
     job_statuses={"Pending Review":"#ffffff","Ghosted":"#6b6b69","Accepted":"#16c60c","Rejected":"#e74856","Pending Interview":"#e0eb1e","Pending Submission":"#ffac1c","Removed":"#f70218","Withdrawn":"#5b8db8","Offer Received":"#628c5f","Offer Rejected":"#5b4663"}
     job_connection=sqlite3.connect("jobs.db")
@@ -26,8 +25,10 @@ def database_creation():
         current:dict=tables[table]
         for index,column in enumerate(current["columns"]):
             query_body+= f"{column} {current["types"][index]}," if index!=len(current["columns"])-1 else f"{column} {current["types"][index]}"
+        print(current)
         if current.get("foreign_keys"):
-            for foreign_key in foreign_keys:
+            foreign_keys=current["foreign_keys"]
+            for foreign_key in current["foreign_keys"]:
                 query_body+=f", FOREIGN KEY ({foreign_keys[foreign_key]}) REFERENCES {foreign_key}({foreign_keys[foreign_key]})"
         job_cursor.execute(f"CREATE TABLE IF NOT EXISTS {table} ({query_body})")
         job_connection.commit()
