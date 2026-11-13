@@ -89,7 +89,7 @@ def modify_job(db_cursor:sqlite3.Cursor,db_connection:sqlite3.Connection):
         db_cursor.execute("update job set interview_date=? where job_id=?",[interview_time,selected_job])
         db_connection.commit()
     current_time=datetime.datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S")
-    db_cursor.execute("update job set job_status=?,last_updated_date=? where job_id=?",[selected_status,current_time,selected_job])
+    db_cursor.execute("update job set job_status=?,last_updated_date=? interview_date=NULL where job_id=?",[selected_status,current_time,selected_job])
     job_log(db_cursor,db_connection,selected_job,interview_time)
     db_connection.commit()
     input("Successfully modified job, press any key to go back to main interface ")
