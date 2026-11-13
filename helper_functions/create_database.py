@@ -25,7 +25,6 @@ def database_creation():
         current:dict=tables[table]
         for index,column in enumerate(current["columns"]):
             query_body+= f"{column} {current["types"][index]}," if index!=len(current["columns"])-1 else f"{column} {current["types"][index]}"
-        print(current)
         if current.get("foreign_keys"):
             foreign_keys=current["foreign_keys"]
             for foreign_key in current["foreign_keys"]:
