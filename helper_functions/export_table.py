@@ -10,7 +10,7 @@ def resolve_path(subdirectory:str):
     current_directory=os.getcwd()
     planned_path=os.path.normpath(current_directory+subdirectory)
     if not os.path.isdir(planned_path):
-        os.mkdir(planned_path)
+        os.makedirs(planned_path)
     return planned_path
 
 
