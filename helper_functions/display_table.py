@@ -74,10 +74,9 @@ def display_application_history(sql_cursor:sqlite3.Cursor,sql_connector:sqlite3.
     for header in headers:
         job_table.add_column(header)
     for result in fetch_history:
-        print(result)
         job_status=result[3]
         job_table.add_row(*list(map(lambda x:str(x),result)),style=fetch_statuses[job_statuses.index(job_status)][1])
-    # clear()
+    clear()
     console=Console()
     console.print(job_table,overflow="fold")
     input("Press any key to stop viewing ")
