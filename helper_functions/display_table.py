@@ -40,6 +40,7 @@ def create_table(sql_cursor:sqlite3.Cursor,sql_connector:sqlite3.Connection):
         job_status=result[5]
         job_table.add_row(*list(map(lambda x:str(x),result)),style=fetch_statuses[job_statuses.index(job_status)][1])
     console=Console()
+    clear()
     console.print(job_table,overflow="fold")
     input("Press any key to stop viewing ")
 
