@@ -37,7 +37,7 @@ def create_table(sql_cursor:sqlite3.Cursor,sql_connector:sqlite3.Connection):
     for header in headers:
         job_table.add_column(header)
     for result in sql_results:
-        job_status=result[3]
+        job_status=result[5]
         job_table.add_row(*list(map(lambda x:str(x),result)),style=fetch_statuses[job_statuses.index(job_status)][1])
     console=Console()
     console.print(job_table,overflow="fold")
