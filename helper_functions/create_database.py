@@ -13,7 +13,7 @@ def database_creation():
             "job":{"columns":["job_id","job_title","last_updated_date","job_status","employer_id","site_id","job_listing_url","interview_date"],"types":["INTEGER PRIMARY KEY","TEXT","TEXT DEFAULT (datetime('now', 'localtime'))","INTEGER","INTEGER","INTEGER","TEXT","TEXT DEFAULT NULL"]
                     ,"foreign_keys":{"employer":"employer_id","job_site":"site_id","job_status":"job_status"}
                    },
-            "job_history":{"columns":["job_history_id","job_id","update_date","job_status","interview_date"],"types":["INTEGER PRIMARY KEY","INTEGER","TEXT DEFAULT (datetime('now', 'localtime'))","INTEGER","TEXT"],
+            "job_history":{"columns":["job_history_id","job_id","update_time","job_status","interview_date"],"types":["INTEGER PRIMARY KEY","INTEGER","TEXT DEFAULT (datetime('now', 'localtime'))","INTEGER","TEXT"],
                            "foreign_keys":{"job":"job_id","job_status":"job_status"}}
             }
     job_sites={"LinkedIn":"https://www.linkedin.com/","Indeed":"https://www.indeed.com/","ZipRecruiter":"https://www.ziprecruiter.com/"}
