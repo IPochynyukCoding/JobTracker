@@ -63,7 +63,7 @@ def display_application_history(sql_cursor:sqlite3.Cursor,sql_connector:sqlite3.
     join job on job_history.job_id=job.job_id
     join employer on job.employer_id=employer.employer_id
     join job_site on job.site_id=job_site.site_id
-    join job_status on job.job_status=job_status.job_status
+    join job_status on job_history.job_status=job_status.job_status
     where job.job_id=?;
     '''
     fetch_history=fetch_items(sql_cursor,search_query,[selected_job])
@@ -74,9 +74,10 @@ def display_application_history(sql_cursor:sqlite3.Cursor,sql_connector:sqlite3.
     for header in headers:
         job_table.add_column(header)
     for result in fetch_history:
+        print(result)
         job_status=result[3]
         job_table.add_row(*list(map(lambda x:str(x),result)),style=fetch_statuses[job_statuses.index(job_status)][1])
-    clear()
+    # clear()
     console=Console()
     console.print(job_table,overflow="fold")
     input("Press any key to stop viewing ")
