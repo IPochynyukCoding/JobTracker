@@ -21,7 +21,7 @@ def clear():
 
 
 def create_table(sql_cursor:sqlite3.Cursor,sql_connector:sqlite3.Connection):
-    headers=["Job ID","Job Title","Employer","Job Site","Last Updated","Job Status""Interview Date"]
+    headers=["Job ID","Job Title","Employer","Job Site","Last Updated","Job Status","Interview Date"]
     search_query='''
     select job_id,job_title,employer.employer_name, job_site.site_name,last_updated_date, job_status.status_name,job.interview_date
     from job 
