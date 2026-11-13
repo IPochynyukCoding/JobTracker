@@ -1,27 +1,18 @@
-import platform
 import sqlite3
-import subprocess
 import os
+import subprocess
 try:
     import rich
 except ImportError:
     subprocess.run(["pip","install","-r","requirements.txt"])
-from helper_functions.display_table import create_table,display_application_history
+from helper_functions.display_table import create_table,display_application_history,clear
 from helper_functions.job_functions import add_job,modify_job,auto_update_ghost
 from helper_functions.create_database import database_creation
 from helper_functions.export_table import select_export
 from helper_functions.input_validation import input_validation
 
 
-def clear():
-    is_windows= True if platform.system()=="Windows" else False
-    clear_command = "cls" if is_windows else "clear"
-    clearing=subprocess.run([clear_command],check=True,shell=True)
-    try:
-        clearing.check_returncode()
-    except subprocess.CalledProcessError:
-        print("Unable to successfully clear")
-        quit()
+
 
 
 

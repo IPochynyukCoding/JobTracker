@@ -1,9 +1,24 @@
 import sqlite3
+import subprocess
+import platform
 from rich.console import Console
 from rich.table import Table
 from helper_functions.input_validation import input_table_validation
 def fetch_items(sql_cursor:sqlite3.Cursor,query:str,parameters=None):
     return sql_cursor.execute(query,parameters).fetchall() if parameters else sql_cursor.execute(query).fetchall()
+
+
+def clear():
+    is_windows= True if platform.system()=="Windows" else False
+    clear_command = "cls" if is_windows else "clear"
+    clearing=subprocess.run([clear_command],check=True,shell=True)
+    try:
+        clearing.check_returncode()
+    except subprocess.CalledProcessError:
+        print("Unable to successfully clear")
+        quit()
+
+
 
 def create_table(sql_cursor:sqlite3.Cursor,sql_connector:sqlite3.Connection):
     headers=["Job ID","Job Title","Employer","Job Site","Last Updated","Job Status""Interview Date"]
@@ -61,6 +76,7 @@ def display_application_history(sql_cursor:sqlite3.Cursor,sql_connector:sqlite3.
     for result in fetch_history:
         job_status=result[3]
         job_table.add_row(*list(map(lambda x:str(x),result)),style=fetch_statuses[job_statuses.index(job_status)][1])
+    clear()
     console=Console()
     console.print(job_table,overflow="fold")
     input("Press any key to stop viewing ")
